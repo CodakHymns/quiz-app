@@ -127,7 +127,7 @@ const QuizScreen = ({ navigation }) => {
   );
 };
 
-// Styling
+// Styling....
 
 const styles = StyleSheet.create({
   container: {
