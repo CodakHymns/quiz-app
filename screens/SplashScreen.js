@@ -3,7 +3,7 @@ import { View, Text,Image, TouchableOpacity, StyleSheet } from 'react-native';
 
 const SplashScreen = ({ navigation }) => {
   const handleStartHome = () => {
-    navigation.navigate('Home');
+    navigation.navigate('Login');
   };
 
   return (

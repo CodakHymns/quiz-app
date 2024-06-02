@@ -1,23 +1,33 @@
 import React from 'react';
-import { View, Text, TouchableOpacity, StyleSheet } from 'react-native';
+import { View, Text, Button, StyleSheet, Share } from 'react-native';
+
 
 const ResultScreen = ({ route, navigation }) => {
-  const { score, totalQuestions, quizData } = route.params;
+  const { score, total } = route.params;
 
-  const handleRetry = () => {
-    navigation.reset({
-      index: 0,
-      routes: [{ name: 'Quiz', params: { quizData } }],
-    });
+  const handleShare = async () => {
+    try {
+      await Share.share({
+        message: `I scored ${score} out of ${total} in the SenseManquiz! Can you beat my score?`,
+      });
+    } catch (error) {
+      console.error('Error sharing', error.message);
+    }
   };
+
+
 
   return (
     <View style={styles.container}>
-      <Text style={styles.title}>Quiz Result</Text>
-      <Text style={styles.scoreText}>Your score: {score} out of {totalQuestions}</Text>
-      <TouchableOpacity style={styles.retryButton} onPress={handleRetry}>
-        <Text style={styles.retryButtonText}>Retry</Text>
-      </TouchableOpacity>
+      <Text style={styles.header}>Quiz Result</Text>
+      <Text style={styles.scoreText}>Your Score: {score} out of {total}</Text>
+      <View style={styles.buttonContainer}>
+        <Button title="Retry" onPress={() => navigation.navigate('QuizSelection')} />
+      </View>
+      <View style={styles.buttonContainer}>
+        <Button title="Share Scores" onPress={handleShare} />
+      </View>
+      
     </View>
   );
 };
@@ -27,27 +37,19 @@ const styles = StyleSheet.create({
     flex: 1,
     justifyContent: 'center',
     alignItems: 'center',
-    backgroundColor: '#f0f0f0',
+    padding: 16,
   },
-  title: {
+  header: {
     fontSize: 24,
-    fontWeight: 'bold',
-    marginBottom: 16,
+    marginBottom: 20,
   },
   scoreText: {
-    fontSize: 18,
-    marginBottom: 24,
+    fontSize: 20,
+    marginBottom: 20,
   },
-  retryButton: {
-    backgroundColor: '#007AFF',
-    paddingVertical: 12,
-    paddingHorizontal: 24,
-    borderRadius: 8,
-  },
-  retryButtonText: {
-    color: '#fff',
-    fontSize: 16,
-    fontWeight: 'bold',
+  buttonContainer: {
+    marginVertical: 10,
+    width: '80%',
   },
 });
 
