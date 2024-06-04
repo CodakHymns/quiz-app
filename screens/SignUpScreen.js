@@ -42,14 +42,14 @@ const SignUpScreen = () => {
           onChangeText={handlePasswordChange}
           secureTextEntry={true} // Hide password characters
         />
-        <CustomText style={styles.forgotPassword}>Already Have an Account? Login</CustomText>
+        
       </View>
       <TouchableOpacity style={styles.signInButton}>
         <CustomText style={styles.signInText}>Sign Up</CustomText>
       </TouchableOpacity>
       <View style={styles.divider}>
         <View style={styles.dividerLine} />
-        <CustomText style={styles.dividerText}>Create an account</CustomText>
+        <CustomText style={styles.dividerText}>Already have an Account? Login</CustomText>
         <View style={styles.dividerLine} />
       </View>
       <CustomText style={styles.orText}>Or Continue With</CustomText>
