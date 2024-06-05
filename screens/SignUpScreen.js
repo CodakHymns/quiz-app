@@ -1,67 +1,98 @@
-import React, { useState } from 'react';
-import { View, TextInput, TouchableOpacity, StyleSheet } from 'react-native';
+import React, { useState, useEffect } from 'react';
+import { View, TextInput, TouchableOpacity, StyleSheet, Keyboard, TouchableWithoutFeedback } from 'react-native';
 import Icon from 'react-native-vector-icons/MaterialCommunityIcons'; // Import icons
 import CustomText from '../CustomText'; // Import CustomText component
+import { useNavigation } from '@react-navigation/native'; // Import useNavigation hook
 
 const SignUpScreen = () => {
   const [email, setEmail] = useState('');
   const [password, setPassword] = useState('');
+  const [confirmPassword, setConfirmPassword] = useState('');
+  const [keyboardVisible, setKeyboardVisible] = useState(false);
+  const navigation = useNavigation(); // Initialize navigation
 
   const handleEmailChange = (text) => setEmail(text);
   const handlePasswordChange = (text) => setPassword(text);
-  
-  // Handle login logic here
+  const handleConfirmPasswordChange = (text) => setConfirmPassword(text);
+
+  const navigateToLogin = () => {
+    navigation.navigate('Login'); // Navigate to LoginScreen
+  };
+
+  useEffect(() => {
+    const keyboardDidShowListener = Keyboard.addListener('keyboardDidShow', () => {
+      setKeyboardVisible(true);
+    });
+    const keyboardDidHideListener = Keyboard.addListener('keyboardDidHide', () => {
+      setKeyboardVisible(false);
+    });
+
+    return () => {
+      keyboardDidHideListener.remove();
+      keyboardDidShowListener.remove();
+    };
+  }, []);
 
   return (
-    <View style={styles.container}>
-      <CustomText style={styles.loginText}>Create Account</CustomText>
-      <View style={styles.titleContainer}>
-        <CustomText style={styles.titleLine1}>Create your account and explore unlimited</CustomText>
-        <CustomText style={styles.titleLine2}>questions with SenseMan</CustomText>
+    <TouchableWithoutFeedback onPress={Keyboard.dismiss}>
+      <View style={styles.container}>
+        <CustomText style={styles.loginText}>Create Account</CustomText>
+        <View style={styles.titleContainer}>
+          <CustomText style={styles.titleLine1}>Create your account and explore unlimited</CustomText>
+          <CustomText style={styles.titleLine2}>questions with SenseMan</CustomText>
+        </View>
+        {/* Email Input */}
+        <View style={styles.inputContainer}>
+          <TextInput
+            style={styles.emailInput}
+            placeholder="Email"
+            value={email}
+            onChangeText={handleEmailChange}
+          />
+          {/* Password Input and Confirm Password */}
+          <View style={styles.passwordContainer}>
+            <TextInput
+              style={styles.passwordInput}
+              placeholder="Password"
+              value={password}
+              onChangeText={handlePasswordChange}
+              secureTextEntry={true} // Hide password characters
+            />
+            <TextInput
+              style={styles.passwordInput}
+              placeholder="Confirm Password"
+              value={confirmPassword}
+              onChangeText={handleConfirmPasswordChange}
+              secureTextEntry={true} // Hide password characters
+            />
+          </View>
+          <TouchableOpacity style={styles.signInButton}>
+            <CustomText style={styles.signInText}>Sign Up</CustomText>
+          </TouchableOpacity>
+        </View>
+        {!keyboardVisible && (
+          <>
+            <View style={styles.divider}>
+              <View style={styles.dividerLine} />
+              <CustomText style={styles.dividerText}>Already have an Account?</CustomText>
+              <TouchableOpacity onPress={navigateToLogin}>
+                <CustomText style={styles.loginLink}>Login</CustomText>
+              </TouchableOpacity>
+              <View style={styles.dividerLine} />
+            </View>
+            <CustomText style={styles.orText}>Or Continue With</CustomText>
+            <View style={styles.socialButtons}>
+              <TouchableOpacity style={styles.socialButton}>
+                <Icon name="google" size={45} color="#DB4437" />
+              </TouchableOpacity>
+              <TouchableOpacity style={styles.socialButton}>
+                <Icon name="facebook" size={45} color="#4267B2" />
+              </TouchableOpacity>
+            </View>
+          </>
+        )}
       </View>
-      {/* Email Input */}
-      <TextInput
-        style={styles.emailInput}
-        placeholder="Email"
-        value={email}
-        onChangeText={handleEmailChange}
-      />
-      {/* Password Input and Forgot Password */}
-      <View style={styles.passwordContainer}>
-        <TextInput
-          style={styles.passwordInput}
-          placeholder="Password"
-          value={password}
-          onChangeText={handlePasswordChange}
-          secureTextEntry={true} // Hide password characters
-        />
-        <TextInput
-          style={styles.passwordInput}
-          placeholder="Confirm Password"
-          value={password}
-          onChangeText={handlePasswordChange}
-          secureTextEntry={true} // Hide password characters
-        />
-        
-      </View>
-      <TouchableOpacity style={styles.signInButton}>
-        <CustomText style={styles.signInText}>Sign Up</CustomText>
-      </TouchableOpacity>
-      <View style={styles.divider}>
-        <View style={styles.dividerLine} />
-        <CustomText style={styles.dividerText}>Already have an Account? Login</CustomText>
-        <View style={styles.dividerLine} />
-      </View>
-      <CustomText style={styles.orText}>Or Continue With</CustomText>
-      <View style={styles.socialButtons}>
-        <TouchableOpacity style={styles.socialButton}>
-          <Icon name="google" size={45} color="#DB4437" />
-        </TouchableOpacity>
-        <TouchableOpacity style={styles.socialButton}>
-          <Icon name="facebook" size={45} color="#4267B2" />
-        </TouchableOpacity>
-      </View>
-    </View>
+    </TouchableWithoutFeedback>
   );
 };
 
@@ -94,6 +125,10 @@ const styles = StyleSheet.create({
     textAlign: 'center',
     fontFamily: 'Poppins-SemiBold',
   },
+  inputContainer: {
+    width: '100%',
+    alignItems: 'center',
+  },
   emailInput: {
     marginTop: 20,
     padding: 15,
@@ -116,12 +151,6 @@ const styles = StyleSheet.create({
     marginBottom: 5, // Add margin at the bottom to create space for the forgot password text
     marginBottom: 20,
   },
-  forgotPassword: {
-    alignSelf: 'flex-end',
-    fontFamily: 'Poppins-Bold',
-    fontSize: 14,
-    color: '#1338BC',
-  },
   signInButton: {
     marginTop: 10,
     padding: 20,
@@ -143,7 +172,6 @@ const styles = StyleSheet.create({
     alignItems: 'center',
     paddingBottom: 10,
     marginHorizontal: 20, // Add margin on left and right sides
-    
   },
   dividerLine: {
     flex: 1, // Grow to fill available space
@@ -154,7 +182,12 @@ const styles = StyleSheet.create({
     marginHorizontal: 10, // Add spacing between text and line
     fontFamily: 'Poppins-Bold',
     fontSize: 14,
-    
+  },
+  loginLink: {
+    textDecorationLine: 'underline', // Underline the text
+    color: '#1338BC',
+    fontFamily: 'Poppins-Bold',
+    marginRight: 10,
   },
   orText: {
     marginTop: 60,

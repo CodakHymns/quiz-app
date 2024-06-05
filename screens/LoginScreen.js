@@ -1,57 +1,87 @@
-import React, { useState } from 'react';
-import { View, TextInput, TouchableOpacity, StyleSheet } from 'react-native';
+import React, { useState, useEffect } from 'react';
+import { View, TextInput, TouchableOpacity, StyleSheet, Keyboard, TouchableWithoutFeedback } from 'react-native';
 import Icon from 'react-native-vector-icons/MaterialCommunityIcons'; // Import icons
 import CustomText from '../CustomText'; // Import CustomText component
+import { useNavigation } from '@react-navigation/native'; // Import useNavigation hook
 
 const LoginScreen = () => {
   const [email, setEmail] = useState('');
   const [password, setPassword] = useState('');
+  const [keyboardVisible, setKeyboardVisible] = useState(false);
+  const navigation = useNavigation(); // Initialize navigation
 
   const handleEmailChange = (text) => setEmail(text);
   const handlePasswordChange = (text) => setPassword(text);
-  
-  // Handle login logic here
+
+  const navigateToSignUp = () => {
+    navigation.navigate('SignUp'); // Navigate to SignUpScreen
+  };
+
+  useEffect(() => {
+    const keyboardDidShowListener = Keyboard.addListener('keyboardDidShow', () => {
+      setKeyboardVisible(true);
+    });
+    const keyboardDidHideListener = Keyboard.addListener('keyboardDidHide', () => {
+      setKeyboardVisible(false);
+    });
+
+    return () => {
+      keyboardDidHideListener.remove();
+      keyboardDidShowListener.remove();
+    };
+  }, []);
 
   return (
-    <View style={styles.container}>
-      <CustomText style={styles.loginText}>Login Here</CustomText>
-      <CustomText style={styles.welcomeText}>Hello, we are happy having you back!!!</CustomText>
-      {/* Email Input */}
-      <TextInput
-        style={styles.emailInput}
-        placeholder="Email"
-        value={email}
-        onChangeText={handleEmailChange}
-      />
-      {/* Password Input and Forgot Password */}
-      <View style={styles.passwordContainer}>
-        <TextInput
-          style={styles.passwordInput}
-          placeholder="Password"
-          value={password}
-          onChangeText={handlePasswordChange}
-          secureTextEntry={true} // Hide password characters
-        />
-        <CustomText style={styles.forgotPassword}>Forgot Your password?</CustomText>
+    <TouchableWithoutFeedback onPress={Keyboard.dismiss}>
+      <View style={styles.container}>
+        <CustomText style={styles.loginText}>Login Here</CustomText>
+        <CustomText style={styles.welcomeText}>Hello, we are happy having you back!!!</CustomText>
+        {/* Email Input */}
+        <View style={styles.inputContainer}>
+          <TextInput
+            style={styles.emailInput}
+            placeholder="Email"
+            value={email}
+            onChangeText={handleEmailChange}
+          />
+          {/* Password Input and Forgot Password */}
+          <View style={styles.passwordContainer}>
+            <TextInput
+              style={styles.passwordInput}
+              placeholder="Password"
+              value={password}
+              onChangeText={handlePasswordChange}
+              secureTextEntry={true} // Hide password characters
+            />
+            <CustomText style={styles.forgotPassword}>Forgot Your password?</CustomText>
+          </View>
+          <TouchableOpacity style={styles.signInButton}>
+            <CustomText style={styles.signInText}>Sign In</CustomText>
+          </TouchableOpacity>
+        </View>
+        {!keyboardVisible && (
+          <>
+            <View style={styles.divider}>
+              <View style={styles.dividerLine} />
+              <CustomText style={styles.dividerText}>Don't have an account?</CustomText>
+              <TouchableOpacity onPress={navigateToSignUp}>
+                <CustomText style={styles.createLink}>Create</CustomText>
+              </TouchableOpacity>
+              <View style={styles.dividerLine} />
+            </View>
+            <CustomText style={styles.orText}>Or Continue With</CustomText>
+            <View style={styles.socialButtons}>
+              <TouchableOpacity style={styles.socialButton}>
+                <Icon name="google" size={45} color="#DB4437" />
+              </TouchableOpacity>
+              <TouchableOpacity style={styles.socialButton}>
+                <Icon name="facebook" size={45} color="#4267B2" />
+              </TouchableOpacity>
+            </View>
+          </>
+        )}
       </View>
-      <TouchableOpacity style={styles.signInButton}>
-        <CustomText style={styles.signInText}>Sign In</CustomText>
-      </TouchableOpacity>
-      <View style={styles.divider}>
-        <View style={styles.dividerLine} />
-        <CustomText style={styles.dividerText}>Create an account</CustomText>
-        <View style={styles.dividerLine} />
-      </View>
-      <CustomText style={styles.orText}>Or Continue With</CustomText>
-      <View style={styles.socialButtons}>
-        <TouchableOpacity style={styles.socialButton}>
-          <Icon name="google" size={45} color="#DB4437" />
-        </TouchableOpacity>
-        <TouchableOpacity style={styles.socialButton}>
-          <Icon name="facebook" size={45} color="#4267B2" />
-        </TouchableOpacity>
-      </View>
-    </View>
+    </TouchableWithoutFeedback>
   );
 };
 
@@ -72,6 +102,10 @@ const styles = StyleSheet.create({
     fontFamily: 'Poppins-SemiBold',
     fontSize: 16,
     marginBottom: 1,
+  },
+  inputContainer: {
+    width: '100%',
+    alignItems: 'center',
   },
   emailInput: {
     marginTop: 20,
@@ -122,7 +156,6 @@ const styles = StyleSheet.create({
     alignItems: 'center',
     paddingBottom: 10,
     marginHorizontal: 20, // Add margin on left and right sides
-    
   },
   dividerLine: {
     flex: 1, // Grow to fill available space
@@ -133,7 +166,12 @@ const styles = StyleSheet.create({
     marginHorizontal: 10, // Add spacing between text and line
     fontFamily: 'Poppins-Bold',
     fontSize: 14,
-    
+  },
+  createLink: {
+    textDecorationLine: 'underline', // Underline the text
+    color: '#1338BC',
+    fontFamily: 'Poppins-Bold',
+    marginRight: 10,
   },
   orText: {
     marginTop: 60,
