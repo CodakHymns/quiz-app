@@ -252,6 +252,7 @@ const styles = StyleSheet.create({
     fontSize: 16,
     fontWeight: 'bold',
     color: '#2ECC40',
+    textAlign: 'center',
   },
   nextButtonContainer: {
   marginTop: 20,
