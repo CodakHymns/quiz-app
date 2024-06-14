@@ -4,6 +4,7 @@ import axios from 'axios';
 import Icon from 'react-native-vector-icons/MaterialCommunityIcons';
 import CustomBottomTabBar from '../components/CustomBottomTabBar'
 import { SafeAreaView } from 'react-native';
+import { auth } from '../firebaseConfig';
 
 const screenWidth = Dimensions.get('window').width;
 const numColumns = 2;
@@ -60,11 +61,25 @@ const QuizSelectionScreen = ({ navigation }) => {
       <Text style={styles.categoryText}>{item.name}</Text>
     </TouchableOpacity>
   );
+  const [userEmail, setUserEmail] = useState('');
+ 
+
+  useEffect(() => {
+    // Fetch user's email and set initial letter
+    const fetchUserData = async () => {
+      const currentUser = auth.currentUser;
+      if (currentUser) {
+        setUserEmail(currentUser.email);
+      }
+    };
+
+    fetchUserData();
+  }, []);
 
   return (
     
     <SafeAreaView style={styles.container}>
-      <Text style={styles.subHeader}>Hi, Edmond</Text>
+      <Text style={styles.subHeader}>Hi, {userEmail}</Text>
       <Text style={styles.header}>Let’s make the day productive</Text>
       <Text style={styles.instruction}>Choose your topic of interest. Are you ready??</Text>
       <FlatList
@@ -83,7 +98,7 @@ const QuizSelectionScreen = ({ navigation }) => {
 const styles = StyleSheet.create({
   container: {
     flex: 1,
-    marginTop:'7%',
+    marginTop:'10%',
     padding: 14,
     backgroundColor: '#f0f0f0',
   },
@@ -107,6 +122,7 @@ const styles = StyleSheet.create({
   },
   listContainer: {
     alignItems: 'center',
+    paddingBottom: '20%',
   },
   categoryButton: {
     marginHorizontal:'1%',

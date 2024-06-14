@@ -19,6 +19,15 @@ const AboutScreen = () => {
         and encourages continuous learning.
       </Text>
       <Text style={styles.description}>
+        Our mission is to make learning fun and accessible through interactive quizzes
+        that cover various topics such as General Knowledge, Science, History, and more.
+        Each quiz session is crafted to provide engaging content that stimulates curiosity
+        and encourages continuous learning.
+      </Text>
+      <Text style={styles.description}>
+      As a passionate user of QuizMan, I enjoy exploring diverse topics and challenging myself with quizzes. I believe continuous learning is key to personal growth, and QuizMan provides me with a fun and engaging platform to expand my knowledge in various fields.
+      </Text>
+      <Text style={styles.description}>
         Download Senseman Quiz App today and embark on a journey of discovery,
         knowledge, and entertainment!
       </Text>
@@ -30,8 +39,7 @@ const AboutScreen = () => {
 const styles = StyleSheet.create({
   container: {
     flex: 1,
-    justifyContent: 'center',
-    alignItems: 'center',
+    marginTop: '20%',
     paddingHorizontal: 20,
     backgroundColor: '#fff',
   },
@@ -39,12 +47,12 @@ const styles = StyleSheet.create({
     fontSize: 24,
     fontWeight: 'bold',
     marginBottom: 20,
-    textAlign: 'center',
+    textAlign: 'left',
     color:"#1338BC",
   },
   description: {
     fontSize: 16,
-    textAlign: 'center',
+    textAlign: 'left',
     marginBottom: 15,
     lineHeight: 22,
   },
