@@ -15,6 +15,7 @@ import QuizScreenLayer from './screens/QuizLayerScreen';
 import { useFonts } from 'expo-font';
 import CustomText from './CustomText'; // Import CustomText component
 
+
 const Stack = createStackNavigator();
 
 const App = () => {

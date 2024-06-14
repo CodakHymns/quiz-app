@@ -1,8 +1,10 @@
 import React, { useState, useEffect } from 'react';
-import { View, TextInput, TouchableOpacity, StyleSheet, Keyboard, TouchableWithoutFeedback } from 'react-native';
+import { View, TextInput, TouchableOpacity, StyleSheet, Keyboard, TouchableWithoutFeedback, Alert } from 'react-native';
 import Icon from 'react-native-vector-icons/MaterialCommunityIcons'; // Import icons
 import CustomText from '../CustomText'; // Import CustomText component
 import { useNavigation } from '@react-navigation/native'; // Import useNavigation hook
+import { getAuth, signInWithEmailAndPassword } from 'firebase/auth';
+import { app } from '../firebaseConfig'; // Import Firebase config
 
 const LoginScreen = () => {
   const [email, setEmail] = useState('');
@@ -31,20 +33,32 @@ const LoginScreen = () => {
     };
   }, []);
 
+  const handleSignIn = async () => {
+    try {
+      const auth = getAuth(app);
+      await signInWithEmailAndPassword(auth, email, password);
+      Alert.alert('Success', 'Logged in successfully');
+      // Navigate to the main screen or wherever you want after login
+      navigation.navigate('QuizSelection');
+    } catch (error) {
+      Alert.alert('Error', error.message);
+    }
+  };
+
   return (
     <TouchableWithoutFeedback onPress={Keyboard.dismiss}>
       <View style={styles.container}>
         <CustomText style={styles.loginText}>Login Here</CustomText>
         <CustomText style={styles.welcomeText}>Hello, we are happy having you back!!!</CustomText>
-        {/* Email Input */}
         <View style={styles.inputContainer}>
           <TextInput
             style={styles.emailInput}
             placeholder="Email"
             value={email}
             onChangeText={handleEmailChange}
+            keyboardType="email-address"
+            autoCapitalize="none"
           />
-          {/* Password Input and Forgot Password */}
           <View style={styles.passwordContainer}>
             <TextInput
               style={styles.passwordInput}
@@ -52,10 +66,11 @@ const LoginScreen = () => {
               value={password}
               onChangeText={handlePasswordChange}
               secureTextEntry={true} // Hide password characters
+              autoCapitalize="none"
             />
             <CustomText style={styles.forgotPassword}>Forgot Your password?</CustomText>
           </View>
-          <TouchableOpacity style={styles.signInButton}>
+          <TouchableOpacity style={styles.signInButton} onPress={handleSignIn}>
             <CustomText style={styles.signInText}>Sign In</CustomText>
           </TouchableOpacity>
         </View>
