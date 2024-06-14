@@ -2,6 +2,8 @@ import React, { useState, useEffect } from 'react';
 import { View, Text, StyleSheet, FlatList, TouchableOpacity, Dimensions } from 'react-native';
 import axios from 'axios';
 import Icon from 'react-native-vector-icons/MaterialCommunityIcons';
+import CustomBottomTabBar from '../components/CustomBottomTabBar'
+import { SafeAreaView } from 'react-native';
 
 const screenWidth = Dimensions.get('window').width;
 const numColumns = 2;
@@ -54,13 +56,14 @@ const QuizSelectionScreen = ({ navigation }) => {
     <TouchableOpacity 
       style={styles.categoryButton} 
       onPress={() => navigation.navigate('Difficulty', { category: item.name, categoryId: item.id })}>
-      <Icon name={iconsMap[item.name] || 'help'} size={40} color="#ffffff" />
+      <Icon name={iconsMap[item.name] || 'help'} size={40} color="#1338BC" />
       <Text style={styles.categoryText}>{item.name}</Text>
     </TouchableOpacity>
   );
 
   return (
-    <View style={styles.container}>
+    
+    <SafeAreaView style={styles.container}>
       <Text style={styles.subHeader}>Hi, Edmond</Text>
       <Text style={styles.header}>Let’s make the day productive</Text>
       <Text style={styles.instruction}>Choose your topic of interest. Are you ready??</Text>
@@ -71,14 +74,17 @@ const QuizSelectionScreen = ({ navigation }) => {
         numColumns={numColumns}
         contentContainerStyle={styles.listContainer}
       />
-    </View>
+    <CustomBottomTabBar />
+      
+    </SafeAreaView>
   );
 };
 
 const styles = StyleSheet.create({
   container: {
     flex: 1,
-    padding: 16,
+    marginTop:'7%',
+    padding: 14,
     backgroundColor: '#f0f0f0',
   },
   header: {
@@ -103,16 +109,19 @@ const styles = StyleSheet.create({
     alignItems: 'center',
   },
   categoryButton: {
-    backgroundColor: 'blue',
+    marginHorizontal:'1%',
+    backgroundColor: '#E7ECFF',
     padding: 20,
     margin: 10,
     borderRadius: 8,
     width: itemWidth,
     alignItems: 'center',
     justifyContent: 'center',
+    borderWidth:2,
+    borderColor:'#1338BC',
   },
   categoryText: {
-    color: '#ffffff',
+    color: '#1338BC',
     fontSize: 14,
     textAlign: 'center',
     marginTop: 10,

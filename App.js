@@ -14,6 +14,8 @@ import DifficultyScreen from './screens/DifficultyScreen';
 import QuizScreenLayer from './screens/QuizLayerScreen';
 import { useFonts } from 'expo-font';
 import CustomText from './CustomText'; // Import CustomText component
+import AboutScreen from './screens/AboutScreen';
+import ProfileScreen from './screens/ProfileScreen';
 
 
 const Stack = createStackNavigator();
@@ -44,6 +46,8 @@ const App = () => {
         {/* <Stack.Screen name="Quiz" component={QuizScreen} /> */}
         <Stack.Screen name="Quiz" component={QuizScreenLayer} options={{ headerShown: false }} />
         <Stack.Screen name="Result" component={ResultScreen} options={{ headerShown: false }} />
+        <Stack.Screen name="About" component={AboutScreen} options={{ headerShown: false }} />
+        <Stack.Screen name="Profile" component={ProfileScreen} options={{ headerShown: false }} />
       </Stack.Navigator>
     </NavigationContainer>
   );
