@@ -1,7 +1,10 @@
 import React, { useState, useEffect } from 'react';
-import { View, Text, TouchableOpacity, StyleSheet, ActivityIndicator, Button } from 'react-native'; 
+import { View, Text, TouchableOpacity, StyleSheet, ActivityIndicator, Button } from 'react-native';
 import axios from 'axios';
 import he from 'he';
+import { Ionicons } from '@expo/vector-icons';
+import CustomText from '../CustomText';
+
 
 const QuizScreenLayer = ({ route, navigation }) => {
   const { category, difficulty } = route.params;
@@ -86,15 +89,27 @@ const QuizScreenLayer = ({ route, navigation }) => {
 
   return (
     <View style={styles.container}>
-      <View style={styles.questionNumber}>
-        <Text style={styles.scoreboardText}>Question: {currentQuestionIndex + 1}/{questions.length}</Text>
+      {/* Top Container */}
+      <View style={styles.topContainer}>
+        <TouchableOpacity onPress={() => navigation.navigate('QuizSelection')} style={styles.backButton}>
+          <View style={styles.arrowContainer}>
+            <Ionicons name="arrow-back" size={24} color="black" />
+          </View>
+        </TouchableOpacity>
+        <View style={styles.categoryContainer}>
+          <CustomText style={styles.categoryText}>{category}</CustomText>
+          <CustomText style={styles.questionCountText}>Questions: {questions.length}</CustomText>
+        </View>
       </View>
-      <View style={styles.scoreboard}>
-        <Text style={styles.scoreboardText}>Score: {score}</Text>
-      </View>
+
+      
+
+      {/* Question Container */}
       <View style={styles.questionContainer}>
-        <Text style={styles.question}>{he.decode(currentQuestion.question)}</Text>
+        <CustomText style={styles.question}>{he.decode(currentQuestion.question)}</CustomText>
       </View>
+
+      {/* Answers Container */}
       <View style={styles.answersContainer}>
         {shuffledAnswers.map((option, index) => (
           <TouchableOpacity
@@ -111,17 +126,18 @@ const QuizScreenLayer = ({ route, navigation }) => {
           </TouchableOpacity>
         ))}
       </View>
+
       {showCorrectAnswer && (
         <Text style={styles.correctAnswerText}>
           The correct answer is: {he.decode(currentQuestion.correct_answer)}
         </Text>
       )}
+
+      {/* Next Button Container */}
       <View style={styles.nextButtonContainer}>
-        <Button
-          title="Next"
-          onPress={handleNextQuestion}
-          disabled={!showNextButton}
-        />
+      <TouchableOpacity style={styles.nextButton} onPress={handleNextQuestion} disabled={!showNextButton}>
+        <Text style={styles.nextButtonText}>Next</Text>
+      </TouchableOpacity>
       </View>
     </View>
   );
@@ -130,9 +146,39 @@ const QuizScreenLayer = ({ route, navigation }) => {
 const styles = StyleSheet.create({
   container: {
     flex: 1,
-    justifyContent: 'center',
-    alignItems: 'center',
     padding: 16,
+  },
+  topContainer: {
+    flexDirection: 'row',
+    alignItems: 'center',
+    marginBottom: 16,
+    marginTop: '20%',
+  },
+  backButton: {
+    marginRight: 16,
+  },
+  arrowContainer: {
+    backgroundColor: 'white',
+    borderRadius: 50,
+    borderWidth: 2,
+    borderColor: 'blue',
+    padding: 9,
+    
+  },
+  categoryContainer: {
+    flex: 1,
+    alignItems: 'center',
+  },
+  categoryText: {
+    fontFamily: 'Poppins-SemiBold',
+    fontSize: 27,
+    marginRight: '10%',
+    color: '#1338BC',
+  },
+  questionCountText: {
+    fontSize: 14,
+    color: '#555',
+    marginRight: '10%',
   },
   questionNumber: {
     position: 'absolute',
@@ -146,9 +192,10 @@ const styles = StyleSheet.create({
   },
   scoreboardText: {
     fontSize: 16,
-    fontWeight: 'bold',
+    fontFamily: 'Poppins-SemiBold',
   },
   questionContainer: {
+    marginTop: 16,
     marginBottom: 20,
     shadowColor: '#000',
     shadowOffset: {
@@ -162,15 +209,14 @@ const styles = StyleSheet.create({
     borderRadius: 8,
     padding: 16,
     width: '100%',
-    alignItems: 'center',
   },
   question: {
     fontSize: 18,
-    fontWeight: 'bold',
-    textAlign: 'center',
+    fontFamily: 'Poppins-SemiBold',
+    textAlign: 'left',
   },
   answersContainer: {
-    marginBottom: 20,
+    fontFamily: 'Poppins-Regular',
     width: '100%',
   },
   answerButton: {
@@ -180,7 +226,7 @@ const styles = StyleSheet.create({
     paddingHorizontal: 16,
     marginBottom: 12,
     width: '100%',
-    alignItems: 'center',
+    alignItems: 'flex-start',
     shadowColor: '#000',
     shadowOffset: {
       width: 0,
@@ -199,6 +245,7 @@ const styles = StyleSheet.create({
   answerText: {
     fontSize: 16,
     color: '#333',
+    textAlign: 'left',
   },
   correctAnswerText: {
     marginTop: 10,
@@ -207,10 +254,22 @@ const styles = StyleSheet.create({
     color: '#2ECC40',
   },
   nextButtonContainer: {
-    marginTop: 20,
-    width: '80%',
-    alignItems: 'center',
-  },
+  marginTop: 20,
+  width: '100%',
+  alignItems: 'center',
+},
+nextButton: {
+  backgroundColor: '#1338BC',
+  borderRadius: 28,
+  paddingVertical: 16,
+  paddingHorizontal: 52,
+},
+nextButtonText: {
+  fontSize: 18,
+  color: '#fff',
+  fontWeight: 'bold',
+},
+
 });
 
 export default QuizScreenLayer;
