@@ -8,7 +8,7 @@ const ResultScreen = ({ route, navigation }) => {
   const handleShare = async () => {
     try {
       await Share.share({
-        message: `I scored ${score} out of ${total} in the SenseManquiz! Can you beat my score?`,
+        message: `I scored ${score} out of ${total} in the SenseMan quiz! Can you beat my score?`,
       });
     } catch (error) {
       console.error('Error sharing', error.message);
